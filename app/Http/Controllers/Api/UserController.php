@@ -6,6 +6,9 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
+use Exception;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -36,16 +39,61 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        //
+        $user = User::where('id', $request->id)->first();
+        if (!empty($user)) {
+            try {
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->display_name = $request->display_name;
+                $user->tag_name = $request->tag_name;
+                $user->bio = $request->bio;
+                $user->save();
+                return [
+                    'status' => Response::HTTP_OK,
+                    'message' => 'User Updated',
+                    'data' => $user
+                ];
+            } catch (Exception $e) {
+                return [
+                    'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $e->getMessage(),
+                    'data' => []
+                ];
+            }
+        }
+
+        return [
+            'status' => Response::HTTP_NOT_FOUND,
+            'message' => 'User not Found',
+            'data' => []
+        ];
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        //
+        if (!empty($request->id)) {
+            $user = User::where('id', $request->id)->first();
+        }
+
+        if (!empty($user)) {
+            $user->delete();
+            return [
+                'status' => Response::HTTP_OK,
+                'message' => 'User Deleted',
+                'data' => []
+            ];
+        }
+
+        return [
+            'status' => Response::HTTP_NOT_FOUND,
+            'message' => 'User not Found',
+            'data' => []
+        ];
     }
 }

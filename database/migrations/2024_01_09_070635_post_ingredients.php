@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->integer('post');
             $table->integer('ingredient');
-            $table->integer('amount');
-            $table->string('measurement');
+            $table->integer('amount')->nullable();
+            $table->string('measurement')->nullable();
 
             $table->timestamps();
         });
