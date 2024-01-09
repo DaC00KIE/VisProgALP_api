@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UserFollowingController;
+use App\Http\Controllers\Api\AuthenticationController;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,14 +25,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:sanctum')->group(function(){
 
+});
 Route::apiResource('users', UserController::class);
-Route::apiResource('posts', PostController::class);
+Route::apiResource('posts', PostController::class)->Middleware(['auth:sanctum']);
 Route::apiResource('ingredients', IngredientController::class);
 Route::apiResource('bookmarks', BookmarkController::class);
 Route::apiResource('user_following', UserFollowingController::class);
 
-Route::middleware('auth:sanctum')->group(function(){
 
-});
+Route::post('/login',[AuthenticationController::class,'login']);
+Route::post('/logout',[AuthenticationController::class,'logout'])->Middleware(['auth:sanctum']);
+Route::post('/me',[AuthenticationController::class,'me'])->Middleware(['auth:sanctum']);
 
