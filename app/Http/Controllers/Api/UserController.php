@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\StoreUserRequest;
 
 class UserController extends Controller
 {
@@ -23,11 +24,11 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        return new UserResource(User::create($request->all()));
     }
-
+ 
     /**
      * Display the specified resource.
      */
@@ -44,11 +45,10 @@ class UserController extends Controller
         $user = User::where('id', $request->id)->first();
         if (!empty($user)) {
             try {
-                $user->name = $request->name;
+                $user->username = $request->username;
                 $user->email = $request->email;
                 $user->password = Hash::make($request->password);
                 $user->display_name = $request->display_name;
-                $user->tag_name = $request->tag_name;
                 $user->bio = $request->bio;
                 $user->save();
                 return [
