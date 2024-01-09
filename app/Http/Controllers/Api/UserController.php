@@ -24,9 +24,25 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        return new UserResource(User::create($request->all()));
+        $validatedData = $request->validate([
+            'username' => 'required | unique:users,username',
+            'email' => 'required | email',
+            'password' => 'required',
+            'bio' => 'nullable',
+            'location' => 'nullable',
+            'display_name' => 'nullable',
+            'profile_picture' => 'nullable'
+        ]);
+        // 'username' => ['required', 'unique'],
+        // 'email' => ['required', 'email'],
+        // 'password' => ['required'],
+        // 'bio' => ['nullable'],
+        // 'location' => ['nullable'],
+        // 'display_name' => ['nullable'],
+        // 'profile_picture' => ['nullable',]
+        return new UserResource(User::create($validatedData));
     }
  
     /**
@@ -48,9 +64,12 @@ class UserController extends Controller
                 $user->username = $request->username;
                 $user->email = $request->email;
                 $user->password = Hash::make($request->password);
-                $user->display_name = $request->display_name;
                 $user->bio = $request->bio;
+                $user->location = $request->location;
+                $user->display_name = $request->display_name;
+                $user-> profile_picture = $request->profile_picture;
                 $user->save();
+ 
                 return [
                     'status' => Response::HTTP_OK,
                     'message' => 'User Updated',
