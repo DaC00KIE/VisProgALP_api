@@ -15,7 +15,7 @@ class Ingredient extends Model
         'name'
     ];
 
-    public function posts():BelongsToMany{
+    public function posts(){
         return $this->belongsToMany(Post::class);
     }
 }

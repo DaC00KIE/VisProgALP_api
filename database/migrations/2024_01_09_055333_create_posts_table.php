@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('user');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('image');
             $table->string('title');
             $table->text('caption');
+            $table->integer('likeCount')->default(0);
             // $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();

@@ -17,16 +17,14 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'username' => $this->username,
             'displayName' => $this->display_name,
-            'tagName' => $this->tag_name,
+            'password' => $this->password,
             'bio' => $this->bio,
             'profile_picture' => $this->profile_picture,
             'location' => $this->location,
             'createdAt' => $this->created_at,
-            // 'postsCollection' => PostResource::collection(Post::all()->where('user','=',$this->id)),
-            'posts' => Post::all()->where('user','=',$this->id),
-            // 'posts' => PostResource::collection($this->whenLoaded('posts'))
+            'posts' => $this->posts
         ];
     }
 }

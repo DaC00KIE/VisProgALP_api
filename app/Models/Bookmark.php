@@ -11,11 +11,11 @@ class Bookmark extends Model
 {
     use HasFactory;
 
-    public function user():BelongsTo{
+    public function user(){
         return $this->belongsTo(User::class);
     }
 
-    public function posts():HasMany{
+    public function posts(){
         return $this->hasMany(Post::class);
     }
 }

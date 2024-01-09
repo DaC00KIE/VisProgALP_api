@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\UserCollection;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        return new UserCollection(User::all());
     }
 
     /**
@@ -26,30 +27,37 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'username' => 'required | unique:users,username',
-            'email' => 'required | email',
-            'password' => 'required',
-            'bio' => 'nullable',
-            'location' => 'nullable',
-            'display_name' => 'nullable',
-            'profile_picture' => 'nullable'
-        ]);
-        // 'username' => ['required', 'unique'],
-        // 'email' => ['required', 'email'],
-        // 'password' => ['required'],
-        // 'bio' => ['nullable'],
-        // 'location' => ['nullable'],
-        // 'display_name' => ['nullable'],
-        // 'profile_picture' => ['nullable',]
-        return new UserResource(User::create($validatedData));
+        try {
+            $validatedData = $request->validate([
+                'username' => 'required | unique:users,username',
+                'email' => 'required | email',
+                'password' => 'required',
+                'bio' => 'nullable',
+                'location' => 'nullable',
+                'display_name' => 'nullable',
+                'profile_picture' => 'nullable'
+            ]);
+
+            return [
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => "User successfully created",
+                'data' => new UserResource(User::create($validatedData))
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
     }
- 
+
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Request $request)
     {
+        $user = User::find($request->id);
         return new UserResource($user);
     }
 
@@ -67,9 +75,9 @@ class UserController extends Controller
                 $user->bio = $request->bio;
                 $user->location = $request->location;
                 $user->display_name = $request->display_name;
-                $user-> profile_picture = $request->profile_picture;
+                $user->profile_picture = $request->profile_picture;
                 $user->save();
- 
+
                 return [
                     'status' => Response::HTTP_OK,
                     'message' => 'User Updated',

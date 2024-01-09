@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('post_ingredients', function (Blueprint $table) {
             $table->id();
 
-            $table->integer('post');
-            $table->integer('ingredient');
+            $table->foreignId('post_id')->constrained('posts')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('ingredient_id')->constrained('ingredients')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('amount')->nullable();
             $table->string('measurement')->nullable();
 

@@ -18,7 +18,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * 
+     *
      */
     protected $fillable = [
         'username',
@@ -31,27 +31,32 @@ class User extends Authenticatable
     ];
 
 
-    public function bookmarks(): HasOne
+    public function bookmarks()
     {
         return $this->hasOne(Bookmark::class);
     }
 
-    public function posts(): HasMany
+    public function posts()
     {
         return $this->hasMany(Post::class);
     }
 
-    public function followers(): BelongsToMany
+    public function likes()
     {
-        return $this->belongsToMany(User::class, 'follows_users', 'follower_id', 'user_id');
+        return $this->belongsToMany(Post::class, 'user_like', 'post_id', 'user_id');
     }
 
-    public function followings(): BelongsToMany
+    public function followers()
     {
-        return $this->belongsToMany(User::class, 'follows_users', 'user_id', 'follower_id');
+        return $this->belongsToMany(User::class, 'user_followings', 'follower_id', 'user_id');
     }
 
-    public function comments(): HasMany
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'user_followings', 'user_id', 'follower_id');
+    }
+
+    public function comments()
     {
         return $this->hasMany(Comment::class);
     }

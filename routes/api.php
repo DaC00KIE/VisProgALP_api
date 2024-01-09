@@ -32,7 +32,6 @@ Route::apiResource('users', UserController::class);
 Route::apiResource('posts', PostController::class)->Middleware(['auth:sanctum']);
 Route::apiResource('ingredients', IngredientController::class);
 Route::apiResource('bookmarks', BookmarkController::class);
-Route::apiResource('user_following', UserFollowingController::class);
 
 
 Route::post('/login',[AuthenticationController::class,'login']);

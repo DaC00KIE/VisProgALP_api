@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+class IngredientResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,12 +17,7 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'image' => $this->image,
-            'caption' => $this->caption,
-            'user' => $this->user
-            // 'user' => new UserResource(User::find($this->user)),
-            // 'user' => User::all()->where('id','=',$this->user)
+            'name' => $this->name
         ];
     }
 }

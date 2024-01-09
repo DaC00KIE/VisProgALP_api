@@ -15,24 +15,30 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = [
 
-    public function user(): BelongsTo
+    ];
+
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function bookmarks(): BelongsToMany
+    public function bookmarks()
     {
         return $this->belongsToMany(Bookmark::class);
     }
 
-    public function ingredients(): HasMany
+    public function ingredients()
     {
-        return $this->hasMany(Ingredient::class);
+        return $this->belongsToMany(Ingredient::class, 'post_ingredients', 'ingredient_id', 'post_id');
     }
 
-    public function comments(): HasMany
+    public function liked(){
+        return $this->belongsToMany(User::class, 'user_like', 'user_id', 'post_id');
+    }
+
+    public function comments()
     {
         return $this->hasMany(Comment::class);
     }
