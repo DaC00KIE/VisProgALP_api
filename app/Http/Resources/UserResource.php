@@ -20,8 +20,11 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'displayName' => $this->display_name,
             'tagName' => $this->tag_name,
+            'bio' => $this->bio,
+            'profile_picture' => $this->profile_picture,
+            'location' => $this->location,
             'createdAt' => $this->created_at,
-            'posts' => PostResource::collection(Post::all()->where('user','=',$this->id))
+            'posts' => PostResource::collection(Post::all()->where('user','=',$this->id)),
             // 'posts' => PostResource::collection($this->whenLoaded('posts'))
         ];
     }
