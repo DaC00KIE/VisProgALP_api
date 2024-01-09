@@ -29,12 +29,14 @@ Route::middleware('auth:sanctum')->group(function(){
 
 });
 Route::apiResource('users', UserController::class);
-Route::apiResource('posts', PostController::class)->Middleware(['auth:sanctum']);
+Route::apiResource('posts', PostController::class);
 Route::apiResource('ingredients', IngredientController::class);
 Route::apiResource('bookmarks', BookmarkController::class);
 
+Route::get('/postFrom/{id}', [PostController::class, 'getAllFromUserWithId']);
 
-Route::post('/login',[AuthenticationController::class,'login']);
-Route::post('/logout',[AuthenticationController::class,'logout'])->Middleware(['auth:sanctum']);
-Route::post('/me',[AuthenticationController::class,'me'])->Middleware(['auth:sanctum']);
+
+// Route::post('/login',[AuthenticationController::class,'login']);
+// Route::post('/logout',[AuthenticationController::class,'logout'])->Middleware(['auth:sanctum']);
+// Route::post('/me',[AuthenticationController::class,'me'])->Middleware(['auth:sanctum']);
 

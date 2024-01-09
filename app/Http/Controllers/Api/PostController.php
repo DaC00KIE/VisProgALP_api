@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PostController extends Controller
 {
     public function index(){
-        return new PostCollection(Post::with('user')->paginate());
+        return new PostCollection(Post::all());
     }
 
     public function show(Post $post)
@@ -39,6 +39,11 @@ class PostController extends Controller
         ]);
 
         return new PostResource(Post::create($validatedData));
+    }
+
+    public function getAllFromUserWithId(Request $request){
+        // $posts = Post::all()->where('user_id','=',$request->id);
+        return new PostCollection(new PostResource(Post::all()->where("user_id",'=',$request->id)));
     }
 
         /**
