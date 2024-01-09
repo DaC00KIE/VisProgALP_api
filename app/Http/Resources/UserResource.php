@@ -24,7 +24,8 @@ class UserResource extends JsonResource
             'profile_picture' => $this->profile_picture,
             'location' => $this->location,
             'createdAt' => $this->created_at,
-            'posts' => PostResource::collection(Post::all()->where('user','=',$this->id)),
+            // 'postsCollection' => PostResource::collection(Post::all()->where('user','=',$this->id)),
+            'posts' => Post::all()->where('user','=',$this->id),
             // 'posts' => PostResource::collection($this->whenLoaded('posts'))
         ];
     }

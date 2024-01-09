@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\StoreUserRequest;
 
 class UserController extends Controller
 {
@@ -25,9 +26,25 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'username' => 'required | unique:users,username',
+            'email' => 'required | email',
+            'password' => 'required',
+            'bio' => 'nullable',
+            'location' => 'nullable',
+            'display_name' => 'nullable',
+            'profile_picture' => 'nullable'
+        ]);
+        // 'username' => ['required', 'unique'],
+        // 'email' => ['required', 'email'],
+        // 'password' => ['required'],
+        // 'bio' => ['nullable'],
+        // 'location' => ['nullable'],
+        // 'display_name' => ['nullable'],
+        // 'profile_picture' => ['nullable',]
+        return new UserResource(User::create($validatedData));
     }
-
+ 
     /**
      * Display the specified resource.
      */
@@ -44,13 +61,15 @@ class UserController extends Controller
         $user = User::where('id', $request->id)->first();
         if (!empty($user)) {
             try {
-                $user->name = $request->name;
+                $user->username = $request->username;
                 $user->email = $request->email;
                 $user->password = Hash::make($request->password);
-                $user->display_name = $request->display_name;
-                $user->tag_name = $request->tag_name;
                 $user->bio = $request->bio;
+                $user->location = $request->location;
+                $user->display_name = $request->display_name;
+                $user-> profile_picture = $request->profile_picture;
                 $user->save();
+ 
                 return [
                     'status' => Response::HTTP_OK,
                     'message' => 'User Updated',

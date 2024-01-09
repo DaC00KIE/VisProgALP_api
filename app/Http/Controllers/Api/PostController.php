@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Bookmark;
 use App\Models\Ingredient;
 use App\Models\User;
@@ -17,5 +18,10 @@ class PostController extends Controller
 {
     public function index(){
         return  Post::all();
+    }
+
+    public function show(Post $post)
+    {
+        return new PostResource($post);
     }
 }
